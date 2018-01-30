@@ -9,6 +9,7 @@ class ManualRenderer(mistune.Renderer):
     """
     h1_level = 1
     h1_anchor = None
+    h1_title = None
     toc_index = 1
     toc = []
     images = []
@@ -33,6 +34,7 @@ class ManualRenderer(mistune.Renderer):
         - set the starting h# level
         """
         if level == 1 and self.h1_anchor is not None:
+            self.h1_title = text
             text = '<a name="{1}">{0}</a>'.format(text, self.h1_anchor)
         else:
             toc_index = 'toc-{:03d}'.format(self.toc_index)
@@ -98,6 +100,12 @@ if 'introduction' in manual:
             content = f.read()
             html_introduction.append(markdown(content))
 
+if not isinstance(manual['toc'], dict):
+    toc = {}
+    for section in manual['toc']:
+        toc[section] = None
+    manual['toc'] = toc
+
 # Read all the files in the toc list
 html = []    
 toc = {}
@@ -108,13 +116,17 @@ for section, title in manual['toc'].items():
     # section_id = list(section.keys())[0]
     # title = list(section.values())[0]
     filename = section + '.md'
-    path_section = os.path.join(path_content, section)
+    if 'section-directories' in manual and manual['section-directories']:
+        path_section = os.path.join(path_content, section)
+    else:
+        path_section = path_content
     path_markdown = os.path.join(path_section, filename)
     content = None
     try:
         f = open(path_markdown, 'r')
     except IOError:
         # TODO: error handling
+        print('Could not open '+path_markdown)
         pass
     else:
         with f:
@@ -124,6 +136,8 @@ for section, title in manual['toc'].items():
         manualRenderer.clear()
         manualRenderer.h1_anchor = section
         html.append(markdown(content))
+        if title is None:
+            title = manualRenderer.h1_title
         toc[(section, title)] = manualRenderer.toc
         for image in manualRenderer.images:
             images.append((section, image))

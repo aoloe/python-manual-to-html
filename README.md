@@ -46,5 +46,4 @@ Planned features:
 
 - Add for each section a link to the github sources ("This page is open source. Noticed a typo? Or something unclear? Improve this page on GitHub"
 - Option for multiple html files output
-- Get the chapter title from the file's h1
 - Find a good way to show the list of contributors and the copyright notice.
