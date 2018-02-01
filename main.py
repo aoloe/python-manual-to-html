@@ -35,11 +35,11 @@ class ManualRenderer(mistune.Renderer):
         """
         if level == 1 and self.h1_anchor is not None:
             self.h1_title = text
-            text = '<a name="{1}">{0}</a>'.format(text, self.h1_anchor)
+            text = '<a id="{1}">{0}</a>'.format(text, self.h1_anchor)
         else:
             toc_index = 'toc-{:03d}'.format(self.toc_index)
             self.toc.append((toc_index, text))
-            text = '<a name="{1}">{0}</a>'.format(text, toc_index)
+            text = '<a id="{1}">{0}</a>'.format(text, toc_index)
             self.toc_index += 1
 
         level = level + self.h1_level - 1
