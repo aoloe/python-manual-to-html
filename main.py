@@ -17,7 +17,7 @@ class ManualRenderer(mistune.Renderer):
         if kwargs is not None:
             if 'h1_level' in kwargs:
                 self.h1_level = kwargs['h1_level']
-        super(ManualRenderer, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         
     def clear(self):
         """
@@ -43,7 +43,7 @@ class ManualRenderer(mistune.Renderer):
             self.toc_index += 1
 
         level = level + self.h1_level - 1
-        return super(ManualRenderer, self).header(text, level, raw)
+        return super().header(text, level, raw)
 
     def image(self, src, title, alt_text):
         """
@@ -51,7 +51,7 @@ class ManualRenderer(mistune.Renderer):
         - create the list of used images
         """
         self.images.append(src)
-        return super(ManualRenderer, self).image(src, title, alt_text)
+        return super().image(src, title, alt_text)
 
 manualRenderer = ManualRenderer(h1_level=2)
 markdown = mistune.Markdown(renderer=manualRenderer)
